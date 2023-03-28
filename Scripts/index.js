@@ -1,7 +1,7 @@
 import { Scene, PerspectiveCamera, WebGLRenderer, Color, 
 ACESFilmicToneMapping, sRGBEncoding, Mesh, PMREMGenerator, 
 FloatType, BoxGeometry, Vector2, CylinderGeometry, 
-MeshPhysicalMaterial, TextureLoader, PCFShadowMap, PointLight } from "three";
+MeshPhysicalMaterial, TextureLoader, PCFShadowMap, PointLight, DoubleSide } from "three";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { mergeBufferGeometries } from "three/examples/jsm/utils/BufferGeometryUtils";
@@ -106,6 +106,32 @@ const loop = async () => {
   seaMesh.receiveShadow = true;
   seaMesh.position.set(0, maxHeight * 0.1, 0);
   scene.add(seaMesh);
+
+  let mapContainer = new Mesh(
+    new CylinderGeometry(17.1, 17.1, maxHeight * 0.25, 50, 1, true),
+    new MeshPhysicalMaterial({
+      envMap: envmap,
+      map: textures.dirt,
+      envMapIntensity: 0.2,
+      side: DoubleSide,
+    })
+  );
+  mapContainer.receiveShadow = true;
+  mapContainer.position.set(0, maxHeight * 0.125, 0);
+  scene.add(mapContainer);
+
+  let mapFloor = new Mesh(
+    new CylinderGeometry(18.5, 18.5, maxHeight * 0.1, 50),
+    new MeshPhysicalMaterial({
+      envMap: envmap,
+      map: textures.dirt2,
+      envMapIntensity: 0.1,
+      side: DoubleSide,
+    })
+  );
+  mapFloor.receiveShadow = true;
+  mapFloor.position.set(0, -maxHeight * 0.05, 0);
+  scene.add(mapFloor);
 
   renderer.setAnimationLoop(() => {
     controls.update();
