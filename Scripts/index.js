@@ -1,8 +1,10 @@
 import { Scene, PerspectiveCamera, WebGLRenderer, Color, 
 ACESFilmicToneMapping, sRGBEncoding, Mesh, 
-SphereGeometry, MeshStandardMaterial, PMREMGenerator, FloatType } from "three";
+SphereGeometry, MeshStandardMaterial, PMREMGenerator, 
+FloatType, BoxGeometry, Vector2, CylinderGeometry } from "three";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { mergeBufferGeometries } from "three/examples/jsm/utils/BufferGeometryUtils";
 
 const scene = new Scene();
 const camera = new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
@@ -31,15 +33,15 @@ const loop = async () => {
   let envmapTexture = await new RGBELoader().setDataType(FloatType).loadAsync("assets/envmap.hdr");
   envmap = pmrem.fromEquirectangular(envmapTexture).texture;
 
-  let sphereMesh = new Mesh(
-    new SphereGeometry(5, 10, 10),
+  makeHex(3, new Vector2(0, 0));
+  let hexagonMesh = new Mesh(
+    hexagonGeomerties,
     new MeshStandardMaterial({
       envMap: envmap,
-      roughness: 0,
-      metalness: 1,
+      flatShading: true,
     })
   );
-  scene.add(sphereMesh);
+  scene.add(hexagonMesh);
 
   renderer.setAnimationLoop(() => {
     controls.update();
@@ -47,3 +49,17 @@ const loop = async () => {
   });
 }
 loop();
+
+let hexagonGeomerties = new BoxGeometry(0, 0, 0);
+
+function hexGeometry(height, position) {
+  let geo = new CylinderGeometry(1, 1, height, 6, 1, false);
+  geo.translate(position.x, height * 0.5, position.y);
+
+  return geo;
+};
+
+function makeHex(height, position) {
+  let geo = hexGeometry(height, position);
+  hexagonGeomerties = mergeBufferGeometries([hexagonGeomerties, geo]);
+};
