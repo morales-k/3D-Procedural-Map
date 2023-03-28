@@ -1,0 +1,7 @@
+@import url("./boilerplate.css");
+
+canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
