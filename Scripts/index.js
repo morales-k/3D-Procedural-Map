@@ -1,7 +1,8 @@
 import { Scene, PerspectiveCamera, WebGLRenderer, Color, 
 ACESFilmicToneMapping, sRGBEncoding, Mesh, PMREMGenerator, 
 FloatType, BoxGeometry, Vector2, CylinderGeometry, 
-MeshPhysicalMaterial, TextureLoader, PCFShadowMap, PointLight, DoubleSide } from "three";
+MeshPhysicalMaterial, TextureLoader, PCFShadowMap, PointLight, 
+DoubleSide, SphereGeometry, MeshStandardMaterial } from "three";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { mergeBufferGeometries } from "three/examples/jsm/utils/BufferGeometryUtils";
@@ -13,7 +14,6 @@ const renderer = new WebGLRenderer({ antialias: true });
 
 scene.background = new Color("#FFEECC");
 camera.position.set(-17, 31, 33);
-// camera.position.set(0, 0, 50);
 renderer.setSize(innerWidth, innerHeight);
 renderer.toneMapping = ACESFilmicToneMapping;
 renderer.outputEncoding = sRGBEncoding;
@@ -23,12 +23,12 @@ renderer.shadowMap.type = PCFShadowMap;
 
 document.body.appendChild(renderer.domElement);
 
-const light = new PointLight(new Color("#FFCBBE").convertSRGBToLinear().convertSRGBToLinear(), 80, 200);
+const light = new PointLight(new Color("#FFCBBE").convertSRGBToLinear(), 80, 200);
 light.position.set(10, 20, 10);
 light.castShadow = true;
 light.shadow.mapSize.width = 512;
 light.shadow.mapSize.height = 512;
-light.shadow.camera.near = 0.5;
+light.shadow.camera.near = 1;
 light.shadow.camera.far = 500;
 scene.add(light);
 
@@ -132,6 +132,7 @@ const loop = async () => {
   mapFloor.receiveShadow = true;
   mapFloor.position.set(0, -maxHeight * 0.05, 0);
   scene.add(mapFloor);
+  clouds();
 
   renderer.setAnimationLoop(() => {
     controls.update();
@@ -163,10 +164,22 @@ function makeHex(height, position) {
 
   if (height > stoneHeight) {
     stoneGeo = mergeBufferGeometries([geo, stoneGeo]);
+
+    if (Math.random() > 0.8) {
+      stoneGeo = mergeBufferGeometries([stoneGeo, stone(height, position)]);
+    }
   } else if (height > dirtHeight) {
     dirtGeo = mergeBufferGeometries([geo, dirtGeo]);
+
+    if (Math.random() > 0.8) {
+      stoneGeo = mergeBufferGeometries([stoneGeo, stone(height, position)]);
+    }
   } else if (height > grassHeight) {
     grassGeo = mergeBufferGeometries([geo, grassGeo]);
+
+    if (Math.random() > 0.8) {
+      grassGeo = mergeBufferGeometries([grassGeo, tree(height, position)]);
+    }
   } else if (height > sandHeight) {
     sandGeo = mergeBufferGeometries([geo, sandGeo]);
   } else if (height > dirt2Height) {
@@ -188,3 +201,64 @@ function hexMesh(geo, map) {
 
   return mesh;
 };
+
+function stone(height, position) {
+  const px = Math.random() * 0.04;
+  const pz = Math.random() * 0.04;
+
+  // Stone will have radius from 0.1-0.4.
+  const geo = new SphereGeometry(Math.random() * 0.3 + 0.1, 7, 7);
+  geo.translate(position.x + px, height, position.y + pz);
+
+  return geo;
+};
+
+function tree(height, position) {
+  const treeHeight = Math.random() * 1 + 1.25;
+  const geo = new CylinderGeometry(0, 1.5, treeHeight, 3);
+  geo.translate(position.x, height + treeHeight * 0 + 1, position.y);
+
+  const geo2 = new CylinderGeometry(0, 1.15, treeHeight, 3);
+  geo2.translate(position.x, height + treeHeight * 0.6 + 1, position.y);
+
+  const geo3 = new CylinderGeometry(0, 0.8, treeHeight, 3);
+  geo3.translate(position.x, height + treeHeight * 1.25 + 1, position.y);
+
+  return mergeBufferGeometries([geo, geo2, geo3]);
+};
+
+function clouds() {
+  let geo = new SphereGeometry(0, 0, 0); 
+  let count = Math.floor(Math.pow(Math.random(), 0.45) * 4);
+
+  for(let i = 0; i < count; i++) {
+    const puff1 = new SphereGeometry(1.2, 7, 7);
+    const puff2 = new SphereGeometry(1.5, 7, 7);
+    const puff3 = new SphereGeometry(0.9, 7, 7);
+   
+    puff1.translate(-1.85, Math.random() * 0.3, 0);
+    puff2.translate(0, Math.random() * 0.3, 0);
+    puff3.translate(1.85,  Math.random() * 0.3, 0);
+
+    const cloudGeo = mergeBufferGeometries([puff1, puff2, puff3]);
+    cloudGeo.translate( 
+      Math.random() * 20 - 10, 
+      Math.random() * 7 + 7, 
+      Math.random() * 20 - 10
+    );
+    cloudGeo.rotateY(Math.random() * Math.PI * 2);
+
+    geo = mergeBufferGeometries([geo, cloudGeo]);
+  }
+  
+  const mesh = new Mesh(
+    geo,
+    new MeshStandardMaterial({
+      envMap: envmap, 
+      envMapIntensity: 0.75, 
+      flatShading: true,
+    })
+  );
+
+  scene.add(mesh);
+}
