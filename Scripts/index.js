@@ -1,7 +1,7 @@
 import { Scene, PerspectiveCamera, WebGLRenderer, Color, 
 ACESFilmicToneMapping, sRGBEncoding, Mesh, 
-SphereGeometry, MeshStandardMaterial, PMREMGenerator, 
-FloatType, BoxGeometry, Vector2, CylinderGeometry } from "three";
+MeshStandardMaterial, PMREMGenerator, FloatType, 
+BoxGeometry, Vector2, CylinderGeometry } from "three";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { mergeBufferGeometries } from "three/examples/jsm/utils/BufferGeometryUtils";
@@ -33,7 +33,12 @@ const loop = async () => {
   let envmapTexture = await new RGBELoader().setDataType(FloatType).loadAsync("assets/envmap.hdr");
   envmap = pmrem.fromEquirectangular(envmapTexture).texture;
 
-  makeHex(3, new Vector2(0, 0));
+  for (let i = 0; i < 12; i++) {
+    for (let j = 0; j < 12; j++) {
+      makeHex(3, tileToPosition(i, j));
+    }
+  }
+
   let hexagonMesh = new Mesh(
     hexagonGeomerties,
     new MeshStandardMaterial({
@@ -49,6 +54,11 @@ const loop = async () => {
   });
 }
 loop();
+
+function tileToPosition(tileX, tileY) {
+  // If tileY % 2 returns an odd number, hexagon becomes offset.
+  return new Vector2((tileX + (tileY % 2) * 0.5) * 1.77, tileY * 1.55);
+};
 
 let hexagonGeomerties = new BoxGeometry(0, 0, 0);
 
