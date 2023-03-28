@@ -57,7 +57,7 @@ const loop = async () => {
     grass: await new TextureLoader().loadAsync("assets/grass.png"),
     sand: await new TextureLoader().loadAsync("assets/sand.jpg"),
     stone: await new TextureLoader().loadAsync("assets/stone.png"),
-    water: await new TextureLoader().loadAsync("assets/water.jpg"),
+    water: await new TextureLoader().loadAsync("assets/water.png"),
   };
 
   const noise2d = createNoise2D();
@@ -86,6 +86,26 @@ const loop = async () => {
   let sandMesh = hexMesh(sandGeo, textures.sand);
   let stoneMesh = hexMesh(stoneGeo, textures.stone);
   scene.add(dirtMesh, dirt2Mesh, grassMesh, sandMesh, stoneMesh);
+
+  let seaMesh = new Mesh(
+    new CylinderGeometry(17, 17, maxHeight * 0.2, 50),
+    new MeshPhysicalMaterial({
+      envMap: envmap,
+      color: new Color("#55AAFF").convertSRGBToLinear().multiplyScalar(3),
+      ior: 1.1, // Index of refraction
+      transmission: 1,
+      transparent: true,
+      thickness: 1,
+      envMapIntensity: 0.2,
+      roughness: 0.7,
+      metalness: 0.025,
+      roughnessMap: textures.water,
+      metalnessMap: textures.water
+    })
+  );
+  seaMesh.receiveShadow = true;
+  seaMesh.position.set(0, maxHeight * 0.1, 0);
+  scene.add(seaMesh);
 
   renderer.setAnimationLoop(() => {
     controls.update();
