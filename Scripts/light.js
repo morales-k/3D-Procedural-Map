@@ -1,8 +1,13 @@
-import { PointLight, Color } from "three";
+import { AmbientLight, PointLight, Color } from "three";
+
+export const createAmbientLight = () => {
+  const light = new AmbientLight("#d45c1d", 0.2);
+  return light;
+}
 
 export const createPointLight = () => {
-  const light = new PointLight(new Color("#FFCBBE").convertSRGBToLinear(), 80, 200);
-  light.position.set(10, 20, 10);
+  const light = new PointLight(new Color("#f2f2f2").convertSRGBToLinear(), 0.3, 500, 50);
+  light.position.set(10, 20, 100);
   light.castShadow = true;
   light.shadow.mapSize.width = 512;
   light.shadow.mapSize.height = 512;

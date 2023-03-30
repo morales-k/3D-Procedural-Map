@@ -18,7 +18,7 @@ controls.dampingFactor = 0.05;
 controls.enableDamping = true;
 
 scene.background = new Color("#fff0db");
-camera.position.set(12, 30, 40);
+camera.position.set(20, 30, 40);
 
 renderer.setSize(innerWidth, innerHeight);
 renderer.toneMapping = ACESFilmicToneMapping;
