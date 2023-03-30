@@ -60,7 +60,7 @@ function addHexTexture(height, position, maxHeight, textureGeos) {
   const dirtHeight = maxHeight * 0.7;
   const grassHeight = maxHeight * 0.5;
   const sandHeight = maxHeight * 0.3;
-  const dirt2Height = maxHeight * 0;
+  const clayHeight = maxHeight * 0;
 
   if (height > stoneHeight) {
     textureGeos.stone = mergeBufferGeometries([hexGeo, textureGeos.stone]);
@@ -82,7 +82,7 @@ function addHexTexture(height, position, maxHeight, textureGeos) {
     }
   } else if (height > sandHeight) {
       textureGeos.sand = mergeBufferGeometries([hexGeo, textureGeos.sand]);
-  } else if (height > dirt2Height) {
-      textureGeos.dirt2 = mergeBufferGeometries([hexGeo, textureGeos.dirt2]);
+  } else if (height > clayHeight) {
+      textureGeos.clay = mergeBufferGeometries([hexGeo, textureGeos.clay]);
   }
 };
