@@ -1,6 +1,6 @@
 import { CylinderGeometry, Mesh, MeshPhysicalMaterial, Vector2 } from "three";
 import { mergeBufferGeometries } from "three/examples/jsm/utils/BufferGeometryUtils";
-import { createTree } from "./tree";
+import { createTree, createTrunk } from "./tree";
 import { createStone } from "./stone";
 import { createNoise2D } from "simplex-noise";
 
@@ -78,6 +78,7 @@ function addHexTexture(height, position, maxHeight, textureGeos) {
       textureGeos.grass = mergeBufferGeometries([hexGeo, textureGeos.grass]);
 
     if (Math.random() > 0.8) {
+      textureGeos.clay = mergeBufferGeometries([textureGeos.clay, createTrunk(height, position)]);
       textureGeos.grass = mergeBufferGeometries([textureGeos.grass, createTree(height, position)]);
     }
   } else if (height > sandHeight) {
