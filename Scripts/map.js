@@ -17,12 +17,12 @@ export const createMapEdge = (envmap, dirtTexture, maxHeight) => {
   return mapEdge;
 };
 
-export const createMapFloor = (envmap, dirt2Texture, maxHeight) => {
+export const createMapFloor = (envmap, clayTexture, maxHeight) => {
   const mapFloor = new Mesh(
     new CylinderGeometry(18.5, 18.5, maxHeight * 0.1, 50),
     new MeshPhysicalMaterial({
       envMap: envmap,
-      map: dirt2Texture,
+      map: clayTexture,
       envMapIntensity: 0.1,
       side: DoubleSide,
     })
