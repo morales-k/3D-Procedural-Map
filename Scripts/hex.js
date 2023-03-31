@@ -78,7 +78,7 @@ function addHexTexture(height, position, maxHeight, textureGeos) {
       textureGeos.grass = mergeBufferGeometries([hexGeo, textureGeos.grass]);
 
     if (Math.random() > 0.8) {
-      textureGeos.clay = mergeBufferGeometries([textureGeos.clay, createTrunk(height, position)]);
+      textureGeos.bark = mergeBufferGeometries([textureGeos.bark, createTrunk(height, position)]);
       textureGeos.leaves = mergeBufferGeometries([textureGeos.leaves, createTree(height, position)]);
     }
   } else if (height > sandHeight) {
