@@ -7,7 +7,7 @@ export const createWater = (envmap, waterTexture, maxHeight) => {
       envMap: envmap,
       color: new Color("#55AAFF").convertSRGBToLinear().multiplyScalar(3),
       ior: 1.1, // Index of refraction
-      transmission: 1,
+      transmission: 0.7,
       transparent: true,
       thickness: 1,
       envMapIntensity: 0.2,

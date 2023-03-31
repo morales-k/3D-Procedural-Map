@@ -17,7 +17,7 @@ controls.target.set(0, 0, 0);
 controls.dampingFactor = 0.05;
 controls.enableDamping = true;
 
-scene.background = new Color("#fff0db");
+scene.background = new Color("#AECFE6");
 camera.position.set(20, 25, 45);
 
 renderer.setSize(innerWidth, innerHeight);
