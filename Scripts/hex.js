@@ -85,5 +85,9 @@ function addHexTexture(height, position, maxHeight, textureGeos) {
       textureGeos.sand = mergeBufferGeometries([hexGeo, textureGeos.sand]);
   } else if (height > clayHeight) {
       textureGeos.clay = mergeBufferGeometries([hexGeo, textureGeos.clay]);
+
+      if (Math.random() > 0.9) {
+        textureGeos.stone = mergeBufferGeometries([textureGeos.stone, createStone(height, position)]);
+      }
   }
 };
