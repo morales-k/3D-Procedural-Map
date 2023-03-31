@@ -18,7 +18,7 @@ controls.dampingFactor = 0.05;
 controls.enableDamping = true;
 
 scene.background = new Color("#fff0db");
-camera.position.set(20, 30, 40);
+camera.position.set(20, 25, 45);
 
 renderer.setSize(innerWidth, innerHeight);
 renderer.toneMapping = ACESFilmicToneMapping;
@@ -39,6 +39,7 @@ const loop = async () => {
     dirt: await new TextureLoader().loadAsync("assets/dirt.jpg"),
     clay: await new TextureLoader().loadAsync("assets/clay.jpg"),
     grass: await new TextureLoader().loadAsync("assets/grass.png"),
+    leaves: await new TextureLoader().loadAsync("assets/leaves.jpg"),
     sand: await new TextureLoader().loadAsync("assets/sand.jpg"),
     stone: await new TextureLoader().loadAsync("assets/stone.png"),
     water: await new TextureLoader().loadAsync("assets/water.png"),
@@ -47,6 +48,7 @@ const loop = async () => {
     dirt: new BoxGeometry(0, 0, 0),
     clay: new BoxGeometry(0, 0, 0),
     grass: new BoxGeometry(0, 0, 0),
+    leaves: new BoxGeometry(0, 0, 0),
     sand: new BoxGeometry(0, 0, 0),
     stone: new BoxGeometry(0, 0, 0)
   };
@@ -56,6 +58,7 @@ const loop = async () => {
   let dirtMesh = createHexMesh(envmap, textureGeos.dirt, textures.dirt);
   let clayMesh = createHexMesh(envmap, textureGeos.clay, textures.clay);
   let grassMesh = createHexMesh(envmap, textureGeos.grass, textures.grass);
+  let leavesMesh = createHexMesh(envmap, textureGeos.leaves, textures.leaves);
   let sandMesh = createHexMesh(envmap, textureGeos.sand, textures.sand);
   let stoneMesh = createHexMesh(envmap, textureGeos.stone, textures.stone);
 
@@ -66,7 +69,7 @@ const loop = async () => {
   const ambientLight = createAmbientLight();
   const pointLight = createPointLight();
 
-  scene.add(dirtMesh, clayMesh, grassMesh, sandMesh, 
+  scene.add(dirtMesh, clayMesh, grassMesh, leavesMesh, sandMesh, 
             stoneMesh, mapEdge, mapFloor, water, 
             clouds, ambientLight, pointLight);
 
