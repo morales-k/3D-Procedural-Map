@@ -1,7 +1,126 @@
 @import url("./boilerplate.css");
 
+:root {
+  --black-bg: rgba(0, 0, 0, 1);
+}
+
 canvas {
   position: absolute;
   left: 0;
   top: 0;
+  padding-top: 80px;
+}
+
+#background {
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  position: absolute;
+  background-color: var(--black-bg);
+  animation: fadeOut 3.5s linear forwards;
+}
+
+#infoContainer {
+  width: 100%;
+  height: 200px;
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+}
+
+h1 {
+  position: absolute;
+  top: -110%;
+  animation: slideIn 3s ease-in forwards;
+}
+
+h2 {
+  position: absolute;
+  top: -110%;
+  animation: slideIn2 3.5s ease-in forwards;
+}
+
+#newWorldBtn {
+  width: 120px;
+  height: 40px;
+  position: absolute;
+  top: 170px;
+  opacity: 0;
+  background-color: #EEB23F;
+  color: #000;
+  padding: 5px 10px;
+  border: 1px solid #323b42;
+  border-radius: 6px;
+  box-shadow: 0 0 3px 2px #484848;
+  animation: fadeIn 2s linear 5.5s forwards;
+}
+
+#newWorldBtn:hover, #newWorldBtn:active {
+  cursor: pointer;
+  box-shadow: 0 0 3px 2px #ff6000;
+}
+
+@keyframes slideIn {
+  0% {
+    top: -110%;
+  }
+
+  100% {
+    top: 20%;
+  }
+}
+
+@keyframes slideIn2 {
+  0% {
+    top: -110%;
+  }
+
+  100% {
+    top: 55%;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    background-color: var(--black-bg);
+  }
+
+  100% {
+    background-color: rgba(174, 207, 230, 1);
+    visibility: hidden;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@media screen and (min-width: 600px) {
+  #infoContainer {
+    justify-content: flex-start;
+  }
+
+  h1 {
+    font-size: 3em;
+    left: 50px;
+  }
+
+  h2 {
+    font-size: 1.8em;
+    left: 55px;
+  }
+
+  #newWorldBtn {
+    font-size: 1em;
+    left: 60px;
+  }
 }
