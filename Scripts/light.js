@@ -6,8 +6,8 @@ export const createAmbientLight = () => {
 }
 
 export const createPointLight = () => {
-  const light = new PointLight(new Color("#333333").convertSRGBToLinear(), 0.01, 500, 50);
-  light.position.set(10, 20, 100);
+  const light = new PointLight(new Color("#333333").convertSRGBToLinear(), 0.01, 500, 2);
+  light.position.set(10, 15, 200);
   light.castShadow = true;
   light.shadow.mapSize.width = 512;
   light.shadow.mapSize.height = 512;
