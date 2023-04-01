@@ -10,11 +10,12 @@ import { createHexMesh, addHexes } from "./hex";
 import { createAmbientLight, createPointLight } from "./light";
 import { gsap } from "gsap";
 
-let cameraZ = window.innerWidth < 850 ? 95 : 50;
+let cameraZ = window.innerWidth < 850  ? 95 : 50;
 const scene = new Scene();
 const camera = new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 200);
 const renderer = new WebGLRenderer({ antialias: true });
 const controls = new OrbitControls(camera, renderer.domElement);
+const newWorldBtn = document.querySelector("#newWorldBtn");
 controls.target.set(0, 0, 0);
 controls.dampingFactor = 0.05;
 controls.enableDamping = true;
@@ -89,15 +90,23 @@ const loop = async () => {
     controls.update();
     renderer.render(scene, camera);
   });
+
+  // Allow loop to complete once before enabling.
+  newWorldBtn.disabled = false;
 }
 loop();
 
 // Set up event listener for New World button.
-const newWorldBtn = document.querySelector("#newWorldBtn");
-newWorldBtn.addEventListener("click", async () => {
-  // Clear renderer and scene before new world creation.
-  renderer.setAnimationLoop(null);
-  await scene.remove.apply(scene, scene.children);
-  renderer.renderLists.dispose();
+newWorldBtn.addEventListener("click", async (e) => {
+  // Disable the button after click, to prevent duplicate renders.
+  e.target.disabled = true;
+  clearScene();
   loop();
 });
+
+// Clears renderer and scene.
+const clearScene = async () => {
+  renderer.setAnimationLoop(null);
+  renderer.renderLists.dispose();
+  await scene.remove.apply(scene, scene.children);
+};
