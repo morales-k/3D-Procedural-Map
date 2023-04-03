@@ -10,18 +10,17 @@ import { createHexMesh, addHexes } from "./hex";
 import { createAmbientLight, createPointLight } from "./light";
 import { gsap } from "gsap";
 
-let cameraZ = window.innerWidth < 850  ? 95 : 50;
 const scene = new Scene();
 const camera = new PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 200);
 const renderer = new WebGLRenderer({ antialias: true });
 const controls = new OrbitControls(camera, renderer.domElement);
 const newWorldBtn = document.querySelector("#newWorldBtn");
 controls.target.set(0, 0, 0);
-controls.dampingFactor = 0.05;
+controls.dampingFactor = 0.02;
 controls.enableDamping = true;
 
 scene.background = new Color("#AECFE6");
-camera.position.set(25, 20, cameraZ);
+camera.position.set(25, 20, calculateCameraZ(window.innerWidth));
 
 renderer.setSize(innerWidth, innerHeight);
 renderer.toneMapping = ACESFilmicToneMapping;
@@ -31,6 +30,23 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = PCFShadowMap;
 
 document.body.appendChild(renderer.domElement);
+
+const handleResize = () => {
+  let width = window.innerWidth;
+  let height = window.innerHeight;
+  
+  camera.updateProjectionMatrix();
+  camera.aspect = (width / height);
+  renderer.setSize(width, height);
+  camera.position.set(25, 20, calculateCameraZ(width));
+};
+
+function calculateCameraZ(width) {
+  let z = width < 800 ? 90 :
+          width < 900 ? 70 : 50;
+
+  return z;
+};
 
 const loop = async () => {
   // Process enviornment map
@@ -102,6 +118,11 @@ newWorldBtn.addEventListener("click", async (e) => {
   e.target.disabled = true;
   clearScene();
   loop();
+});
+
+// Set event listener for resizing window.
+window.addEventListener("resize", async () => {
+  handleResize();
 });
 
 // Clears renderer and scene.
